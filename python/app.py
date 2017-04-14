@@ -20,6 +20,8 @@ def homepage():
 
 @app.route('/login/twitter')
 def twitter_login():
+    if 'screen_name' in session:
+        return redirect(url_for('profile'))
     request_token = get_request_token()
     session['request_token'] = request_token
     # to make sure twitter returns the proper pin code lets change the settings in our twitter 'app' for callback url!
