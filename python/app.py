@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, redirect, request, url_for, g
 from twitter_utils import get_request_token, get_oauth_verifier_url, get_access_token
 from user import User
 from database import Database
+import requests
 
 app = Flask(__name__)
 app.secret_key = '1234'
@@ -20,12 +21,16 @@ def search():
 
     tweets = g.user.twitter_request('https://api.twitter.com/1.1/search/tweets.json?q={}'.format(twitter_query))
     #  tweets = user.twitter_request('https://api.twitter.com/1.1/search/tweets.json?q={}'  # .format(searchText))
-    tweet_text = [tweet['text'] for tweet in tweets['statuses']] #list comprehension
+    tweet_text = [{'tweet': tweet['text'], 'label': 'neutral'} for tweet in tweets['statuses']] #list comprehension
+
+    for tweet in tweet_text:
+        r = requests.post('http://text-processing.com/api/sentiment/', data={'text': tweet['tweet']})
+        json_response = r.json()
+        label = json_response['label']
+        tweet['label'] = label
+
     return render_template('search.html', content=tweet_text)
-    #[tweet for tweet in tweets['statuses']]
-    # for tweet in tweets['statuses']:
-    #     print(tweet['text'])
-    #     print('https://www.twitter.com/' + tweet['user']['screen_name'] + '\n')
+
 
 
 
@@ -64,10 +69,10 @@ def twitter_auth():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html', user=g.user))
+    return render_template('profile.html', user=g.user)
 
 
 
 #app.run(debug=True)
-
-app.run(host='0.0.0.0', port='4995')
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port='4995')
