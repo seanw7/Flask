@@ -10,7 +10,7 @@ services:
     volumes:
       - ./python:/code
     ports:
-      - "8000:8000"
+      - "4995:4995"
     depends_on:
       db:
         condition: service_healthy

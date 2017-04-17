@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Search results</title>
+</head>
+<body>
+<div class="container">
+    <form>
+        <label for='q'>Twitter Search</label>
+        <input type="text" name="q" id="q" placeholder="Your Twitter Search">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+    <div class="container">
+        <ul class="list-group" id="tweets">
+            {% for element in content %}
+                <li class="list-group-item">{{ element }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

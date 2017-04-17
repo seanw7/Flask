@@ -12,6 +12,6 @@ ADD requirements.txt /code/
 # installing dependencies
 RUN pip install -r requirements.txt
 
-# running login.py code
+# running app.py code
 #WORKDIR /code
-CMD ["./wait-for-it.sh", "db:5432", "--", "python", "login.py"]
+CMD ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]

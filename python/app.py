@@ -6,12 +6,27 @@ from database import Database
 app = Flask(__name__)
 app.secret_key = '1234'
 
-Database.initialise(database='postgres', user='postgres', password='Ac3TeX411', host='localhost')
+Database.initialise(database='postgres', user='postgres', password='postgres', host='db')
 
 @app.before_request
 def load_user():
     if 'screen_name' in session:
         g.user = User.load_from_db_by_screen_name(session['screen_name'])
+
+@app.route('/search')
+def search():
+
+    twitter_query = request.args.get('q')
+
+    tweets = g.user.twitter_request('https://api.twitter.com/1.1/search/tweets.json?q={}'.format(twitter_query))
+    #  tweets = user.twitter_request('https://api.twitter.com/1.1/search/tweets.json?q={}'  # .format(searchText))
+    tweet_text = [tweet['text'] for tweet in tweets['statuses']] #list comprehension
+    return render_template('search.html', content=tweet_text)
+    #[tweet for tweet in tweets['statuses']]
+    # for tweet in tweets['statuses']:
+    #     print(tweet['text'])
+    #     print('https://www.twitter.com/' + tweet['user']['screen_name'] + '\n')
+
 
 
 @app.route('/')
@@ -49,9 +64,10 @@ def twitter_auth():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html', user=g.user)
+    return render_template('profile.html', user=g.user))
 
 
 
 #app.run(debug=True)
-app.run(port=4995)
+
+app.run(host='0.0.0.0', port='4995')
