@@ -5,6 +5,7 @@ twitter-app
 wait-for-postgres.sh
 python-v2
 .idea/
+docker container ip.txt
 
 # Created by https://www.gitignore.io/api/python
 
